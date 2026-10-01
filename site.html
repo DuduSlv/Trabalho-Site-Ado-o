@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdotaPet — Plataforma Unificada de Adoção</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --primary-dark: #1a252f;
+            --secondary: #27ae60;
+            --secondary-hover: #219150;
+            --accent: #3498db;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER & NAVEGAÇÃO */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        nav button:hover, nav button.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* BANNER HERO */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 3.5rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 1.5rem auto;
+            color: #e2e8f0;
+        }
+
+        .btn-hero {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-hero:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* GERENCIAMENTO DE ABAS */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SEÇÃO DE DESTAQUES & GRID */
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            padding-bottom: 0.3rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+
+        /* CARDS DOS ANIMAIS */
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .badge {
+            align-self: flex-start;
+            background-color: #dcfce7;
+            color: #15803d;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .card-info {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+        }
+
+        .card-desc {
+            font-size: 0.92rem;
+            color: var(--text);
+            margin-bottom: 1.2rem;
+            flex: 1;
+        }
+
+        .btn-card {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.7rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-card:hover {
+            background-color: #2980b9;
+        }
+
+        /* FILTROS */
+        .filter-bar {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .filter-group input, .filter-group select {
+            padding: 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        /* FORMULÁRIO DE ADOÇÃO */
+        .form-card {
+            background: white;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--primary);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background-color: #fff;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--accent);
+            outline: 2px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-submit {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 0.9rem;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        /* ALERTAS & TOAST */
+        .toast {
+            display: none;
+            background-color: #dcfce7;
+            border: 1px solid #86efac;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--primary-dark);
+            color: #94a3b8;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+
+        footer span {
+            color: white;
+            font-weight: bold;
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 640px) {
+            .header-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            nav {
+                justify-content: space-around;
+            }
+            .filter-bar {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO DA PLATAFORMA -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo" onclick="switchTab('home')">
+                🐾 AdotaPet
+            </a>
+            <nav>
+                <button id="nav-home" class="active" onclick="switchTab('home')">Início</button>
+                <button id="nav-animais" onclick="switchTab('animais')">Animais Disponíveis</button>
+                <button id="nav-adocao" onclick="switchTab('adocao')">Solicitar Adoção</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ABA 1: PÁGINA INICIAL (HOME) -->
+    <div id="tab-home" class="tab-content active">
+        <section class="hero">
+            <h1>Encontre seu novo melhor amigo</h1>
+            <p>Conectamos animais resgatados a lares amorosos e famílias responsáveis de forma simples, rápida e transparente.</p>
+            <button class="btn-hero" onclick="switchTab('animais')">Ver Animais Disponíveis</button>
+        </section>
+
+        <div class="container">
+            <h2 class="section-title">Animais em Destaque</h2>
+            <div class="grid">
+                <!-- Card Destaque 1 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500" alt="Cão Thor">
+                    <div class="card-body">
+                        <span class="badge">Disponível</span>
+                        <h3 class="card-title">Thor</h3>
+                        <p class="card-info">Cachorro • Macho • 2 Anos • Porte Médio</p>
+                        <p class="card-desc">Thor é carinhoso, vacinado e adora brincar ao ar livre. Ótimo com crianças e sociável com outros cães.</p>
+                        <button class="btn-card" onclick="selecionarEAdotar('Thor')">Adotar o Thor</button>
+                    </div>
+                </div>
+
+                <!-- Card Destaque 2 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500" alt="Gata Mia">
+                    <div class="card-body">
+                        <span class="badge">Disponível</span>
+                        <h3 class="card-title">Mia</h3>
+                        <p class="card-info">Gato • Fêmea • 1 Ano • Porte Pequeno</p>
+                        <p class="card-desc">Mia é muito calma, castrada e vacinada. Ideal para quem mora em apartamento e procura uma boa companhia.</p>
+                        <button class="btn-card" onclick="selecionarEAdotar('Mia')">Adotar a Mia</button>
+                    </div>
+                </div>
+
+                <!-- Card Destaque 3 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=500" alt="Cão Bob">
+                    <div class="card-body">
+                        <span class="badge">Disponível</span>
+                        <h3 class="card-title">Bob</h3>
+                        <p class="card-info">Cachorro • Macho • 3 Anos • Porte Grande</p>
+                        <p class="card-desc">Bob é um cão leal, protetor e muito brincalhão. Necessita de espaço ou casa com quintal para se exercitar.</p>
+                        <button class="btn-card" onclick="selecionarEAdotar('Bob')">Adotar o Bob</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABA 2: PÁGINA DE ANIMAIS (CATÁLOGO COMPLETO) -->
+    <div id="tab-animais" class="tab-content">
+        <div class="container">
+            <h2 class="section-title">Catálogo de Animais</h2>
+
+            <!-- Barra de Filtros -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label for="filter-nome">Pesquisar por Nome:</label>
+                    <input type="text" id="filter-nome" placeholder="Digite o nome..." oninput="filtrarAnimais()">
+                </div>
+                <div class="filter-group">
+                    <label for="filter-especie">Espécie:</label>
+                    <select id="filter-especie" onchange="filtrarAnimais()">
+                        <option value="todos">Todas as espécies</option>
+                        <option value="Cachorro">Cachorro</option>
+                        <option value="Gato">Gato</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-porte">Porte:</label>
+                    <select id="filter-porte" onchange="filtrarAnimais()">
+                        <option value="todos">Todos os portes</option>
+                        <option value="Pequeno">Pequeno</option>
+                        <option value="Médio">Médio</option>
+                        <option value="Grande">Grande</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid de Todos os Animais -->
+            <div class="grid" id="lista-animais">
+                <!-- Animal 1 -->
+                <div class="card pet-item" data-nome="thor" data-especie="Cachorro" data-porte="Médio">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500" alt="Thor">
+                    <div class="card-body">
+                        <span class="badge">Disponível</span>
+                        <h3 class="card-title">Thor</h3>
+                        <p class="card-info">Cachorro • Macho • 2 Anos • Porte Médio</p>
+                        <p class="card-desc">Cidade: Curitiba - PR<br>Vacinas em dia, sociável e brincalhão.</p>
+                        <button class="btn-card" onclick="selecionarEAdotar('Thor')">Quero Adotar</button>
+                    </div>
+                </div>
+
+                <!-- Animal 2 -->
+                <div class="card pet-item" data-nome="mia" data-especie="Gato" data-porte="Pequeno">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500" alt="Mia">
+                    <div class="card-body">
+                        <span class="badge">Disponível</span>
+                        <h3 class="card-title">Mia</h3>
+                        <p class="card-info">Gato • Fêmea • 1 Ano • Porte Pequeno</p>
+                        <p class="card-desc">Cidade: Curitiba - PR<br>Castrada, mansinha e acostumada a apartamento.</p>
+                        <button class="btn-card" onclick="selecionarEAdotar('Mia')">Quero Adotar</button>
+                    </div>
+                </div>
+
+                <!-- Animal 3 -->
+                <div class="card pet-item" data-nome="bob" data-especie="Cachorro" data-porte="Grande">
+                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=500" alt="Bob">
+                    <div class="card-body">
+                        <span class="badge">Disponível</span>
+                        <h3 class="card-title">Bob</h3>
+                        <p class="card-info">Cachorro • Macho • 3 Anos • Porte Grande</p>
+                        <p class="card-desc">Cidade: Pinhais - PR<br>Energético, ótimo cão de guarda e companheiro.</p>
+                        <button class="btn-card" onclick="selecionarEAdotar('Bob')">Quero Adotar</button>
+                    </div>
+                </div>
+
+                <!-- Animal 4 -->
+                <div class="card pet-item" data-nome="luna" data-especie="Gato" data-porte="Pequeno">
+                    <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=500" alt="Luna">
+                    <div class="card-body">
+                        <span class="badge">Disponível</span>
+                        <h3 class="card-title">Luna</h3>
+                        <p class="card-info">Gato • Fêmea • 2 Anos • Porte Pequeno</p>
+                        <p class="card-desc">Cidade: São José dos Pinhais - PR<br>Muito dócil, adora um carinho e vive bem com outros gatos.</p>
+                        <button class="btn-card" onclick="selecionarEAdotar('Luna')">Quero Adotar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABA 3: PÁGINA DE ADOÇÃO (FORMULÁRIO) -->
+    <div id="tab-adocao" class="tab-content">
+        <div class="container">
+            <div class="form-card">
+                <h2 class="section-title">Formulário de Intenção de Adoção</h2>
+
+                <!-- Toast de Sucesso -->
+                <div id="toast-sucesso" class="toast">
+                    🎉 Sua solicitação foi enviada com sucesso! A equipe entrará em contato em breve.
+                </div>
+
+                <form id="form-adocao" onsubmit="enviarFormulario(event)">
+                    <div class="form-group">
+                        <label for="pet-selecionado">Animal de Interesse:</label>
+                        <select id="pet-selecionado" required>
+                            <option value="">-- Selecione o animal --</option>
+                            <option value="Thor">Thor (Cão - Médio)</option>
+                            <option value="Mia">Mia (Gata - Pequeno)</option>
+                            <option value="Bob">Bob (Cão - Grande)</option>
+                            <option value="Luna">Luna (Gata - Pequeno)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nome">Nome Completo:</label>
+                        <input type="text" id="nome" required placeholder="Ex: Ana Clara Souza">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-mail para Contato:</label>
+                        <input type="email" id="email" required placeholder="seuemail@exemplo.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefone">Telefone / WhatsApp:</label>
+                        <input type="tel" id="telefone" required placeholder="(41) 99999-9999">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cidade">Cidade / Estado:</label>
+                        <input type="text" id="cidade" required placeholder="Ex: Curitiba - PR">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="residencia">Tipo de Residência:</label>
+                        <select id="residencia" required>
+                            <option value="Casa com quintal fechado">Casa com quintal fechado</option>
+                            <option value="Casa sem quintal">Casa sem quintal</option>
+                            <option value="Apartamento com redes de proteção">Apartamento com redes de proteção</option>
+                            <option value="Apartamento sem redes">Apartamento sem redes de proteção</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experiencia">Possui experiência com animais?</label>
+                        <select id="experiencia">
+                            <option value="Sim">Sim, já tenho/tive animais</option>
+                            <option value="Não">Não, será meu primeiro pet</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="motivo">Por que você deseja adotar este animal?</label>
+                        <textarea id="motivo" rows="4" required placeholder="Conte um pouco sobre sua rotina e por que deseja um novo companheiro..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Enviar Solicitação de Adoção</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer>
+        <p>&copy; 2026 <span>AdotaPet</span> — Projeto Interdisciplinar de Desenvolvimento de Sistemas.</p>
+    </footer>
+
+    <!-- LOGICA EM JAVASCRIPT -->
+    <script>
+        // Função para alternar entre as abas/páginas
+        function switchTab(tabId) {
+            // Esconde todas as abas
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Desmarca todos os botões da nav
+            const navButtons = document.querySelectorAll('nav button');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Ativa a aba e o botão correspondente
+            document.getElementById('tab-' + tabId).classList.add('active');
+            const activeNavBtn = document.getElementById('nav-' + tabId);
+            if(activeNavBtn) activeNavBtn.classList.add('active');
+
+            // Rola suavemente para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Função para selecionar um animal e ir direto ao formulário
+        function selecionarEAdotar(nomeAnimal) {
+            const selectPet = document.getElementById('pet-selecionado');
+            selectPet.value = nomeAnimal;
+            switchTab('adocao');
+        }
+
+        // Função para filtrar os cards na galeria de animais
+        function filtrarAnimais() {
+            const inputNome = document.getElementById('filter-nome').value.toLowerCase();
+            const selectEspecie = document.getElementById('filter-especie').value;
+            const selectPorte = document.getElementById('filter-porte').value;
+
+            const cards = document.querySelectorAll('.pet-item');
+
+            cards.forEach(card => {
+                const nome = card.getAttribute('data-nome');
+                const especie = card.getAttribute('data-especie');
+                const porte = card.getAttribute('data-porte');
+
+                const matchNome = nome.includes(inputNome);
+                const matchEspecie = (selectEspecie === 'todos' || especie === selectEspecie);
+                const matchPorte = (selectPorte === 'todos' || porte === selectPorte);
+
+                if (matchNome && matchEspecie && matchPorte) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Envio do Formulário de Adoção
+        function enviarFormulario(event) {
+            event.preventDefault();
+            
+            const toast = document.getElementById('toast-sucesso');
+            toast.style.display = 'block';
+
+            // Limpa o formulário após envio
+            document.getElementById('form-adocao').reset();
+
+            // Rola até o aviso
+            toast.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Esconde o toast após 5 segundos
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
